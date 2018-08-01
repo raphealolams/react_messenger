@@ -1,0 +1,118 @@
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,600';
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  color: #2c3e50;
+  font-size: 13px;
+  font-family: "Open Sans", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.app-messenger {
+  display: flex;
+  flex-direction: column;
+}
+.app-messenger .header {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.app-messenger .header .left {
+  width: 200px;
+}
+.app-messenger .header .left .actions {
+  line-height: 50px;
+}
+.app-messenger .header .left .actions button {
+  padding: 0 10px;
+}
+.app-messenger .header .content {
+  flex-grow: 1;
+}
+.app-messenger .header .content h2 {
+  line-height: 50px;
+  text-align: center;
+}
+.app-messenger .header .right {
+  width: 300px;
+}
+.app-messenger .header .right .user-bar {
+  line-height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 10px;
+}
+.app-messenger .header .right .profile-name {
+  padding-right: 10px;
+}
+.app-messenger .header .right .profile-image {
+  line-height: 50px;
+}
+.app-messenger .header .right .profile-image img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-top: 10px 0 0 0;
+}
+.app-messenger .main-content {
+  display: flex;
+  height: 100%;
+}
+.app-messenger .main-content .content {
+  flex-grow: 1;
+  background: #ffffff;
+}
+.app-messenger .main-content .left-sidebar {
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  width: 200px;
+}
+.app-messenger .main-content .right-sidebar {
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  width: 300px;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+.messages .message {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 15px 0;
+}
+.messages .message .message-user-image img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+}
+.messages .message .message-body {
+  padding-left: 10px;
+}
+.messages .message .message-body .message-text {
+  background: #D3D3D3;
+  color: #000000;
+  padding: 10px;
+  border-radius: 10px;
+}
+.messages .message.agent {
+  justify-content: flex-start;
+}
+.messages .message.agent .message-body .message-text {
+  background: #D81A0E;
+  color: #ffffff;
+  word-wrap: break-word;
+}
+
+/*# sourceMappingURL=app.css.map */

@@ -1,0 +1,141 @@
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,600';
+@import 'variable';
+body, html{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body{
+  color: $body-color;
+  font-size: 13px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.app-messenger{
+  display: flex;
+  flex-direction: column;
+
+  // UI header
+  .header{
+    height: $header-height;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid $border-color;
+
+    .left{
+      width: $left-sidebar-width;
+      .actions {
+        line-height: $header-height;
+        button{
+          padding: 0 10px;
+        }
+      }
+    }
+
+    .content{
+      flex-grow: 1;
+      h2{
+        line-height: $header-height;
+        text-align: center;
+      }
+    }
+
+    .right{
+      width: $right-sidebar-width;
+      .user-bar{
+        line-height: $header-height;
+        display: flex;
+        justify-content: flex-end;
+        padding: 0 10px;
+      }
+
+      .profile-name {
+        padding-right: 10px; 
+      }
+
+      .profile-image{
+        line-height: $header-height;
+        img{
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          margin-top: 10px 0 0 0;
+        }
+      }
+    }
+  }
+
+  // UI content
+  .main-content{
+    display: flex;
+    height: 100%;
+
+    .content {
+      flex-grow: 1;
+      background: #ffffff;
+    }
+
+    .left-sidebar{
+      border-right: 1px solid $border-color;
+      width: $left-sidebar-width;
+    }
+    
+    .right-sidebar {
+      border-left: 1px solid $border-color;
+      width: $right-sidebar-width;
+    }
+
+  }
+}
+
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  .message{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 15px 0;
+    .message-user-image{
+      img{
+        width: 20px;
+        height: 20px;
+        border-radius: 50px;
+      }
+    }
+
+    .message-body{
+      padding-left: 10px;
+      .message-author{
+
+      }
+
+      .message-text{
+        background: $sent-background;
+        color: $sent-color;
+        padding: 10px;
+        border-radius: 10px;
+      }
+    }
+
+    &.agent{
+      justify-content: flex-start;
+      .message-body{
+        .message-text{
+          background: $replies-background;
+          color: $replies-color;
+          word-wrap: break-word;
+        }
+      }
+    }
+  }
+}
