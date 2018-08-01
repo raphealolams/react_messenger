@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import './../Css/app.css'
+import './../Css/app.css';
+import classNames from 'classnames'
 
 class UI extends Component{
   constructor(props) {
@@ -95,23 +96,33 @@ class UI extends Component{
             <div className="messages">
               {messages.map((message, index) => {
                 return(
-                  <div className="message">
+                  <div key={index} className={classNames('message', {'agent': message.sender})}>
                     <div className="message-user-image">
-                      <img src="https://www.gravatar.com/avatar/000000000000000?d=mm&f=y" alt="user"/>
+                      <img src={message.avatar} alt="user"/>
                     </div>
                     <div className="message-body">
                       <div className="message-author">
-                        User says
+                        {message.sender ? "Agent" : message.author} says
                       </div>
                       <div className="message-text">
-                        Hello there...
+                        {message.body} {message.uid}
                       </div>
                     </div>
                   </div>
                 )
               })}
-             
+
+              
+              <div className="message-input">
+                <div className="text-input">
+                  <textarea placeholder="write something....."/>
+                </div>
+                <div className="actions">
+                  <button>Send</button>
+                </div>
+              </div>
             </div>
+
           </div>
 
           <div className="right-sidebar">

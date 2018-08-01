@@ -71,6 +71,13 @@ body {
 .app-messenger .main-content .content {
   flex-grow: 1;
   background: #ffffff;
+  overflow-y: auto;
+}
+.app-messenger .main-content .content .messages {
+  flex-grow: 1;
+}
+.app-messenger .main-content .content .message-input {
+  height: 100px;
 }
 .app-messenger .main-content .left-sidebar {
   border-right: 1px solid rgba(0, 0, 0, 0.05);
@@ -85,12 +92,13 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px;
+  overflow-y: auto;
 }
 .messages .message {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin: 15px 0;
+  margin: 15px;
 }
 .messages .message .message-user-image img {
   width: 20px;
@@ -112,7 +120,6 @@ body {
 .messages .message.agent .message-body .message-text {
   background: #D81A0E;
   color: #ffffff;
-  word-wrap: break-word;
 }
 
 /*# sourceMappingURL=app.css.map */

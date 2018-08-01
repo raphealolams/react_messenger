@@ -21,7 +21,6 @@ body{
 .app-messenger{
   display: flex;
   flex-direction: column;
-
   // UI header
   .header{
     height: $header-height;
@@ -80,6 +79,16 @@ body{
     .content {
       flex-grow: 1;
       background: #ffffff;
+      overflow-y: auto;
+      // display: flex;
+      // flex-direction: column;
+      .messages {
+        flex-grow: 1;
+      }
+
+      .message-input{
+        height: 100px;
+      }
     }
 
     .left-sidebar{
@@ -100,11 +109,12 @@ body{
   display: flex;
   flex-direction: column;
   padding: 20px;
+  overflow-y: auto;
   .message{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    margin: 15px 0;
+    margin: 15px;
     .message-user-image{
       img{
         width: 20px;
@@ -133,7 +143,6 @@ body{
         .message-text{
           background: $replies-background;
           color: $replies-color;
-          word-wrap: break-word;
         }
       }
     }
