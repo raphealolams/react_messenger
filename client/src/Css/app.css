@@ -67,17 +67,39 @@ body {
 .app-messenger .main-content {
   display: flex;
   height: 100%;
+  overflow: hidden;
 }
 .app-messenger .main-content .content {
   flex-grow: 1;
   background: #ffffff;
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .app-messenger .main-content .content .messages {
   flex-grow: 1;
 }
 .app-messenger .main-content .content .message-input {
-  height: 100px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+}
+.app-messenger .main-content .content .message-input .text-input {
+  flex-grow: 1;
+}
+.app-messenger .main-content .content .message-input .text-input textarea {
+  border: 0 none;
+  width: 100%;
+  height: 100%;
+  padding: 8px 15px;
+}
+.app-messenger .main-content .content .message-input .actions button.send {
+  background: #2ecc71;
+  color: #ffffff;
+  border: 0 none;
+  padding: 7px 15px;
+  line-height: 50px;
 }
 .app-messenger .main-content .left-sidebar {
   border-right: 1px solid rgba(0, 0, 0, 0.05);
@@ -91,7 +113,6 @@ body {
 .messages {
   display: flex;
   flex-direction: column;
-  padding: 20px;
   overflow-y: auto;
 }
 .messages .message {
@@ -120,6 +141,61 @@ body {
 .messages .message.agent .message-body .message-text {
   background: #D81A0E;
   color: #ffffff;
+}
+
+.channels .channel {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 8px 0;
+}
+.channels .channel .user-image {
+  width: 30px;
+}
+.channels .channel .user-image img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+}
+.channels .channel .channel-info {
+  flex-grow: 1;
+  padding: 8px;
+}
+.channels .channel .channel-info h2 {
+  font-size: 14px;
+  font-weight: 500;
+}
+.channels .channel .channel-info p {
+  font-size: 12px;
+}
+
+.members .member {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.members .member .user-image {
+  width: 30px;
+}
+.members .member .user-image img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+.members .member .user-info {
+  flex-grow: 1;
+  padding-left: 8px;
+}
+.members .member .user-info h2 {
+  font-size: 14px;
+}
+.members .member .user-info p {
+  font-size: 10px;
+}
+
+h2.title {
+  font-style: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 /*# sourceMappingURL=app.css.map */

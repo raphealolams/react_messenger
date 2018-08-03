@@ -89,7 +89,27 @@ class UI extends Component{
         </div>
         <div className="main-content">
           <div className="left-sidebar">
-            Left Sidebar
+            <div className="channels">
+              <div className="channel">
+                <div className="user-image">
+                  <img src="https://www.gravatar.com/avatar/000000000000000?d=mm&f=y" alt="user"/>
+                </div>
+                <div className="channel-info">
+                  <h2>Ajilore, Raphael</h2>
+                  <p>Hello boy</p>
+                </div>
+              </div>
+
+              <div className="channel">
+                <div className="user-image">
+                  <img src="https://www.gravatar.com/avatar/000000000000000?d=mm&f=y" alt="user"/>
+                </div>
+                <div className="channel-info">
+                  <h2>Ajilore, Raphael</h2>
+                  <p>Hello boy</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="content">
@@ -111,22 +131,43 @@ class UI extends Component{
                   </div>
                 )
               })}
+            </div>
 
-              
-              <div className="message-input">
-                <div className="text-input">
-                  <textarea placeholder="write something....."/>
-                </div>
-                <div className="actions">
-                  <button>Send</button>
-                </div>
+            <div className="message-input">
+              <div className="text-input">
+                <textarea placeholder="write something....."/>
+              </div>
+              <div className="actions">
+                <button className="send">Send</button>
               </div>
             </div>
 
           </div>
 
           <div className="right-sidebar">
-            Right Sidebar
+            <div className="members">
+              <div className="member">
+                <div className="user-image">
+                  <img src="https://www.gravatar.com/avatar/000000000000000?d=mm&f=y" alt="user"/>
+                </div>
+
+                <div className="member-info">
+                  <h2>Ajilore Raphae Olamide</h2>
+                  <p>dont wake me up</p>
+                </div>
+              </div>
+
+              <div className="member">
+                <div className="user-image">
+                  <img src="https://www.gravatar.com/avatar/000000000000000?d=mm&f=y" alt="user"/>
+                </div>
+
+                <div className="member-info">
+                  <h2>Ajilore Raphae Olamide</h2>
+                  <p>dont wake me up</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
