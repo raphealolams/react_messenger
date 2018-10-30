@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './../Css/app.css';
 import UI from './UI'
 
 
