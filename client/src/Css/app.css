@@ -223,7 +223,9 @@ body {
   width: 30px;
 }
 .chanels .chanel .user-image img {
-  max-width: 100%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 .chanels .chanel .user-image .channel-avatars {
   overflow: hidden;

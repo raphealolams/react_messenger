@@ -80,14 +80,27 @@ class UI extends Component{
             <div className="user-bar">
               <div className="profile-name">Ajilore Raphael</div>
               <div className="profile-image">
-                <img src="https://www.gravatar.com/avatar/000000000000000?d=mm&f=y" alt="User Image"/>
+                <img src={avatar} alt="User"/>
               </div>
             </div>
 
           </div>
         </div>
         <div className="main">
-          <div className="sidebar-left">Sidebar Left</div>
+          <div className="sidebar-left">
+            <div className="chanels">
+              <div className="chanel">
+                <div className="user-image">
+                  <img src={avatar} alt="user"/>
+                </div>
+
+                <div className="chanel-info">
+                  <h2>Ajilore Raphael</h2>
+                  <p>Hello there</p>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="content">
             <div className="messages">
 
@@ -95,7 +108,7 @@ class UI extends Component{
                 return (
                     <div key={index} className={classNames('message', {'me': message.sender})}>
                     <div className="message-user-image">
-                      <img src={message.avatar} alt="Sender image"/>
+                      <img src={message.avatar} alt="Sender"/>
                     </div>
                     <div className="message-body">
                       <div className="message-author">{message.sender ? "You say" : message.author}</div>
@@ -117,7 +130,21 @@ class UI extends Component{
               </div>
             </div>
           </div>
-          <div className="sidebar-right">Sidebar Right</div>
+          <div className="sidebar-right">
+            <h2 className="title">Members</h2>
+            <div className="members">
+              <div className="member">
+                <div className="user-image">
+                  <img src={avatar} alt=""/>
+                </div>
+
+                <div className="member-info">
+                  <h2>Ajilore Raphael</h2>
+                  <p>Joined: 3 days ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     )
