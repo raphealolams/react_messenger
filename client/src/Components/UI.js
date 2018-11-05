@@ -1,16 +1,14 @@
 import React, {Component} from "react";
 import classNames from 'classnames';
-import avatar from '../image/avater.png';
+import avatar from '../Image/avater.png';
+import {OrderedMap} from 'immutable'
 
 class UI extends Component{
   constructor(props) {
     super(props);
     
     this.state = {
-      height: window.innerHeight,
-      messages: [
-
-      ]
+      height: window.innerHeight
     }
 
     this._onResize = this._onResize.bind(this)
@@ -26,14 +24,15 @@ class UI extends Component{
   }
 
   addTextMessages(){
-    let {messages} = this.state 
-
+    const {store} = this.props
+    // creates test messages
     for(let i = 0; i < 100; i++){
       let isMe = false
 
       if (i % 2 === 0) isMe = true
 
       const newMessage = {
+        _id: i,
         author: `Author: ${i}`,
         body: `The body is: ${i}`,
         avatar: avatar,
@@ -41,10 +40,29 @@ class UI extends Component{
         sender: isMe
       }
 
-      messages.push(newMessage)
+      store.addMessage(i, newMessage)
     }
 
-    this.setState({messages: messages})
+
+    //creates test channels
+    for (let index = 0; index < 10; index++) {
+      const newChannel = {
+        _id: index,
+        title: `Channel Title: ${index}`,
+        lastMessage: `here there..... ${index}`,
+        members: new OrderedMap({
+          2: true,
+          3: true
+        }),
+        messages: new OrderedMap({
+          5: true,
+          6: true,
+          7: true
+        })
+      }
+
+      store.addChannel(index, newChannel)
+    }
   }
  
   genUid() {
@@ -60,11 +78,14 @@ class UI extends Component{
   }
   
   render() {
-    const {height, messages} = this.state
+    const {store} = this.props
+    const {height} = this.state
     const style = {
       height
     }
-    console.log(messages)
+    const messages = store.getMessages()
+    const channels = store.getChannels()
+    console.log({store: this.props.store})
     return (
       <div style={style} className="app-messenger">
         <div className="header">
@@ -89,16 +110,19 @@ class UI extends Component{
         <div className="main">
           <div className="sidebar-left">
             <div className="chanels">
-              <div className="chanel">
-                <div className="user-image">
-                  <img src={avatar} alt="user"/>
+              {channels.map((channel, key) => {
+                return(
+                  <div key={key} className="chanel">
+                  <div className="user-image">
+                    <img src={avatar} alt="user"/>
+                  </div>
+                  <div className="chanel-info">
+                    <h2>{channel.title}</h2>
+                    <p>{channel.lastMessage}</p>
+                  </div>
                 </div>
-
-                <div className="chanel-info">
-                  <h2>Ajilore Raphael</h2>
-                  <p>Hello there</p>
-                </div>
-              </div>
+                )
+              })}
             </div>
           </div>
           <div className="content">
