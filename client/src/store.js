@@ -19,12 +19,18 @@ export default class Store {
         }
     }
 
+    setActiveChannel(channelId) {
+        this.activeChannelId = channelId
+        this.update()
+    }
+
     getActiveChannel() {
         const channel = this.activeChannelId ? this.channels.get(this.activeChannelId) : this.channels.first()
+        return channel
     }
 
     addMessage(index, message = {}) {
-        this.messages = this.messages.set(index, message)
+        this.messages = this.messages.set(`${index}`, message)
         this.update()
     }
 
@@ -32,8 +38,26 @@ export default class Store {
         return this.messages.valueSeq()
     }
 
+    getMessageFromChannel(channel){
+        let messages = []
+        if (channel) {  
+            channel.messages.map((value, key)  => {
+                console.log({value, key})
+                const message = this.messages.get(key)
+                console.log({message})
+                messages.push(message)
+            })  
+        }
+
+        return messages
+    }
+
+    getMembersFromChannel() {
+
+    }
+    
     addChannel(index, channel = {}) {
-        this.channels = this.channels.set(index, channel)
+        this.channels = this.channels.set(`${index}`, channel)
         this.update()
     }
 

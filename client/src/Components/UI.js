@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import classNames from 'classnames';
 import avatar from '../Image/avater.png';
-import {OrderedMap} from 'immutable'
+import {OrderedMap} from 'immutable';
+import _ from 'lodash';
 
 class UI extends Component{
   constructor(props) {
@@ -32,7 +33,7 @@ class UI extends Component{
       if (i % 2 === 0) isMe = true
 
       const newMessage = {
-        _id: i,
+        _id: `${i}`,
         author: `Author: ${i}`,
         body: `The body is: ${i}`,
         avatar: avatar,
@@ -46,20 +47,21 @@ class UI extends Component{
 
     //creates test channels
     for (let index = 0; index < 10; index++) {
-      const newChannel = {
-        _id: index,
+      let newChannel = {
+        _id: `${index}`,
         title: `Channel Title: ${index}`,
         lastMessage: `here there..... ${index}`,
         members: new OrderedMap({
-          2: true,
-          3: true
+          '2': true,
+          '3': true
         }),
-        messages: new OrderedMap({
-          5: true,
-          6: true,
-          7: true
-        })
+        messages: new OrderedMap()
       }
+      const mssgId = `${index}`
+      const moreMssg = `${index+1}`
+      newChannel.messages = newChannel.messages.set(mssgId, true)
+      newChannel.messages = newChannel.messages.set(moreMssg, true)
+
 
       store.addChannel(index, newChannel)
     }
@@ -67,7 +69,14 @@ class UI extends Component{
  
   genUid() {
 		return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-	}
+  }
+  
+  onSelectChannel(key) {
+    const {store} = this.props
+    store.setActiveChannel(key)
+    console.log({selected: key})
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this._onResize)
     this.addTextMessages()
@@ -80,12 +89,12 @@ class UI extends Component{
   render() {
     const {store} = this.props
     const {height} = this.state
-    const style = {
-      height
-    }
-    const messages = store.getMessages()
+    const style = { height }
+    const activeChannel = store.getActiveChannel()
+    const messages =  store.getMessageFromChannel(activeChannel)//store.getMessages()
     const channels = store.getChannels()
-    console.log({store: this.props.store})
+
+    console.log({activeChannel, store: this.props.store})
     return (
       <div style={style} className="app-messenger">
         <div className="header">
@@ -112,7 +121,7 @@ class UI extends Component{
             <div className="chanels">
               {channels.map((channel, key) => {
                 return(
-                  <div key={key} className="chanel">
+                  <div onClick={(key) => this.onSelectChannel(channel._id)} key={channel._id} className="chanel">
                   <div className="user-image">
                     <img src={avatar} alt="user"/>
                   </div>
