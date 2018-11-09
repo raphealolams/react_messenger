@@ -4,6 +4,7 @@ import avatar from '../Image/avater.png';
 import {OrderedMap} from 'immutable';
 import _ from 'lodash';
 import {ObjectId} from '../Helpers/objectid'
+import SearchUser from './SearchUser'
 
 class UI extends Component{
   constructor(props) {
@@ -11,13 +12,29 @@ class UI extends Component{
     
     this.state = {
       height: window.innerHeight,
-      newMessage: 'Hello there...'
+      newMessage: 'Hello there...',
+      searchUser: ""
     }
 
     this._onResize = this._onResize.bind(this)
+    this._onCreateNewChannel = this._onCreateNewChannel.bind(this)
     this.addTextMessages = this.addTextMessages.bind(this)
     this.handleSend = this.handleSend.bind(this)
     this.renderMessage = this.renderMessage.bind(this)
+    this.scrollMessageToBottom = this.scrollMessageToBottom.bind(this)
+  }
+
+  componentDidMount() {
+    window.addEventListener('resize', this._onResize)
+    this.addTextMessages()
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize)
+  }
+
+  componentDidUpdate() {
+    this.scrollMessageToBottom()
   }
 
   _onResize() {
@@ -25,6 +42,27 @@ class UI extends Component{
       height: window.innerHeight
     })
     console.log("window resizing")
+  }
+
+  _onCreateNewChannel() {
+    const {store} = this.props
+
+    const channelId = new ObjectId().toString()
+    const channel = {
+      _id: channelId,
+      title: "New Channel",
+      lastMessage: "",
+      members: new OrderedMap({
+        '2': true,
+        '3': true,
+        '1': true
+      }),
+      messages: new OrderedMap(),
+      isNew: true,
+      created: new Date()
+    }
+
+    store.onCreateNewChannel(channel)
   }
 
   addTextMessages(){
@@ -58,7 +96,8 @@ class UI extends Component{
           '3': true,
           '1': true
         }),
-        messages: new OrderedMap()
+        messages: new OrderedMap(),
+        created: new Date()
       }
       const mssgId = `${index}`
       const moreMssg = `${index+1}`
@@ -123,14 +162,19 @@ class UI extends Component{
     })
   }
 
-  componentDidMount() {
-    window.addEventListener('resize', this._onResize)
-    this.addTextMessages()
+  scrollMessageToBottom() {
+    if (this.messageRef) {
+      this.messageRef.scrollTop = this.messageRef.scrollHeight
+    }
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this._onResize)
-  }
+  searchUserText(event) {
+    const userText = _.get(event, 'target.value')
+    console.log({userText})
+    this.setState({
+      searchUser: userText
+    })
+  } 
   
   render() {
     const {store} = this.props
@@ -145,13 +189,21 @@ class UI extends Component{
       <div style={style} className="app-messenger">
         <div className="header">
           <div className="left">
-            <div className="action">
-              <button>New Message</button>
-            </div>
+            <button className="left-action"><i className="icon-settings-streamline-1" /></button>
+            <button onClick={this._onCreateNewChannel} className="right-action"><i className="icon-edit-modify-streamline" /></button>
+            <h2>Handover Portal</h2>
           </div>
           <div className="content">
-            <h2>{_.get(activeChannel, 'title', '')}</h2>
-          </div>
+
+            { _.get(activeChannel, 'isNew') ? 
+              <div className="toolbar">
+                  <label>To</label>
+                  <input placeholder=" type user name" onChange={(event) => this.searchUserText(event)} type="text" value={this.state.searchUser} />
+                  <h2>{_.get(activeChannel, 'title', '')}</h2>
+                  <SearchUser search={this.state.searchUser} store={store}/>
+              </div> : <h2>{_.get(activeChannel, 'title', '')}</h2>
+            }
+          </div> 
           <div className="right">
             <div className="user-bar">
               <div className="profile-name">Ajilore Raphael</div>
@@ -181,7 +233,7 @@ class UI extends Component{
             </div>
           </div>
           <div className="content">
-            <div className="messages">
+            <div ref={(ref) => this.messageRef = ref} className="messages">
 
               {messages.map((message, index) => {
                 return (
