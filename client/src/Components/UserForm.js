@@ -40,16 +40,15 @@ export default class UserForm extends Component{
         const {user} = this.state
         const {store} = this.props
         event.preventDefault()
-        
+
         this.setState({
             message: null
         }, () => {
             store.login(user.email, user.password)
             .then((userInfo) => {
-                this.setState({
-                    message: null
-                })
-                console.log("callback", userInfo)
+                if (this.props.onClose){
+                    this.props.onClose()
+                }
             })
                 .catch(err => {
                     this.setState({

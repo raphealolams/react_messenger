@@ -3,6 +3,7 @@
 *  
 */
 
+require('dotenv').load();
 import http from 'http';
 import express from 'express';
 import cors from 'cors';
@@ -10,6 +11,9 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import { version } from '../package.json';
 import webSocketServer, {Server} from 'uws'
+import AppRouter from './appRouter';
+import Model from './models';
+import Database from './database'
 
 const PORT = 9107;
 const app = express();
@@ -26,11 +30,15 @@ app.use(bodyParser.json({
   limit: '50mb'
 }));
 
-app.use((req, res) => {
-  res.json({
-    "version": version
-  })
+new Database().connect()
+.then(db => {
+  app.db = db
+  console.log("db connected")
 })
+  .catch(err => {throw err})
+
+app.models = new Model(app)
+app.routers = new AppRouter(app)
 
 app.wss = new Server({
   "server": app.server

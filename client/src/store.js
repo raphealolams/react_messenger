@@ -1,26 +1,49 @@
 import {OrderedMap} from 'immutable'
 import _ from 'lodash'
-
-const users = new OrderedMap({
-    '1': {_id: '1', email: "raphealolams@yahoo.com", name: "Ajilore Raphael", created: new Date(), avater: 'https://api.adorable.io/avatars/100/raphael@adorable.png'},
-    '2': {_id: '2', email: "rolumide@gmail.com", name: "Raphael Olumide", created: new Date(), avater: 'https://api.adorable.io/avatars/100/olumide@adorable.png'},
-    '3': {_id: '3', email: "eniseyi@yahoo.com", name: "Eniola Seyifunmi", created: new Date(), avater: 'https://api.adorable.io/avatars/100/seyi@adorable.png'},
-})
+import Service from './service'
 
 export default class Store {
     constructor(appComponent) {
         this.app = appComponent
         this.messages = new OrderedMap();
         this.channels = new OrderedMap();
+        this.service = new Service()
         this.activeChannelId = null;
         this.user = this.getUserFromLocalStorage()
+        this.users = new OrderedMap()
+        this.token = this.getTokenFromLocalStore()
+        this.search = {
+            user: new OrderedMap()
+        }
+    }
+
+    setUserAccessToken(accessToken) {
+        if (!accessToken) {
+            localStorage.removeItem('token')
+            this.token = null
+            return
+        }
+        this.token = accessToken
+        localStorage.setItem('token', JSON.stringify(accessToken))
+    }
+
+    getTokenFromLocalStore() {
+        let token = null
+        try {
+            const data = localStorage.getItem(token)
+            if (data) {
+                JSON.parse(data)
+            }
+        }
+        catch(err) {
+            console.log(err)
+        }
     }
 
     getUserFromLocalStorage() {
         let user = null
         try {
             const data = localStorage.getItem('me')
-            console.log({data})
 
             if (data) {
                 user = JSON.parse(data)
@@ -37,35 +60,44 @@ export default class Store {
         this.user = user
         if (user) {
             localStorage.setItem('me', JSON.stringify(user))
+            const userId = `${user._id}`
+            this.users = this.users.set(userId, user)
         }
         this.update()
     }
 
-    login(email, password) {
+    login(email = null, password = null) {
         const userEmail = _.toLower(email)
-        const _this = this
+
         return new Promise((resolve, reject) => {
-            const user = users.find(user => user.email === userEmail)
-            if (user) {
-                _this.setCurrentUser(user)
-            }
-            return user ? resolve(user) : reject("User Not Found")
+            this.service.post("api/users/login", {email, password})
+                .then(response => {
+                    console.log("logged in")
+
+                    const accessToken = _.get(response, 'data')
+                    const user = _.get(accessToken, 'user')
+                    this.setCurrentUser(user)
+                    this.setUserAccessToken(accessToken)
+                })
+                    .catch(error => {
+                        console.log("Login error")
+                        const message = _.get(error, 'response.data.error.message', 'Login Error')
+                        return reject(message)
+                    })
         })
+    }
+
+    signOut() {
+        this.user = null
+        localStorage.removeItem('me')
+        this.update()
     }
 
     searchUser(search = "") {
 
-        const keyWord = _.toLower(search)
-        const currentUser = this.getCurrentUser()
-        const currentUserId = _.get(currentUser, '_id')
+        // const keyWord = _.toLower(search)
 
-        let searchItems = new OrderedMap()
-        
-        if (_.trim(search).length) {    
-
-            searchItems = users.filter((user) => _.get(user, '_id') !== currentUserId && _.includes(_.toLower(_.get(user, 'name')), keyWord))
-        }
-        return searchItems.valueSeq()
+        return this.search.users.valueSeq()
     }
 
     getCurrentUser(){
@@ -124,7 +156,8 @@ export default class Store {
 
         if (channel) {
             channel.members.forEach((value, key) => {
-                const user = users.get(key)
+                const userId = `${key}`
+                const user = this.users.get(userId)
                 const loggedUser = this.getCurrentUser()
                 if (_.get(loggedUser, '_id') !== _.get(user, '_id')){
                     members = members.set(key, user)
