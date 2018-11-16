@@ -48,6 +48,31 @@ export default class AppRouter {
                     })
         })
 
+                /**
+         * @param {*} res
+         * @param {*} req,
+         * @param {*} next,
+         * @author endpoint
+         * @method get
+         * @routes /api/users/me
+        */
+        app.get('/api/users/me', (req, res, next) => {
+            let tokenId = req.get('authorization')
+
+            if (!tokenId) {
+                tokenId = _.get(req, 'query.auth')
+            }
+
+            app.models.token.load(tokenId)
+                .then(accessToken => {
+                    return res.status(200).json(accessToken)
+                })
+                    .catch(error => {
+                        return res.status(401).json({error})
+                    })
+        }) 
+
+
         /**
          * @param {*} res
          * @param {*} req,
@@ -59,7 +84,6 @@ export default class AppRouter {
         */
         app.get('/api/users/:id', (req, res, next) => {
             const userId = _.get(req, 'params.id')
-            console.log({userId})
             app.models.user.load(userId)
                 .then(user => {
                     _.unset(user, 'password')
@@ -92,5 +116,6 @@ export default class AppRouter {
                         return res.status(401).json({error})
                     })
         }) 
+
     }
 }

@@ -38,6 +38,8 @@ export default class Store {
         catch(err) {
             console.log(err)
         }
+
+        return token
     }
 
     getUserFromLocalStorage() {
@@ -57,10 +59,13 @@ export default class Store {
     }
 
     setCurrentUser(user) {
+        user.avater = `https://api.adorable.io/avatars/100/${user._id}.png`
+        console.log(user)
         this.user = user
         if (user) {
             localStorage.setItem('me', JSON.stringify(user))
             const userId = `${user._id}`
+            console.log({userId})
             this.users = this.users.set(userId, user)
         }
         this.update()
@@ -69,27 +74,35 @@ export default class Store {
     login(email = null, password = null) {
         const userEmail = _.toLower(email)
 
+        const user = {
+            email: userEmail, 
+            password: password
+        }
         return new Promise((resolve, reject) => {
-            this.service.post("api/users/login", {email, password})
-                .then(response => {
-                    console.log("logged in")
+            this.service.post('api/users/login', user).then((response) => {
+                console.log("logged in")
 
-                    const accessToken = _.get(response, 'data')
-                    const user = _.get(accessToken, 'user')
-                    this.setCurrentUser(user)
-                    this.setUserAccessToken(accessToken)
-                })
-                    .catch(error => {
-                        console.log("Login error")
-                        const message = _.get(error, 'response.data.error.message', 'Login Error')
-                        return reject(message)
-                    })
+                const accessToken = _.get(response, 'data')
+                const user = _.get(accessToken, 'token.user')
+                this.setCurrentUser(user)
+                this.setUserAccessToken(accessToken)
+            })
+            .catch(error => {
+                console.log("Login error")
+                const message = _.get(error, 'response.data.error.message', 'Login Error')
+                return reject(message)
+            })
         })
     }
 
     signOut() {
+        const userId = `${_.get(this.user, '_id', null)}`
         this.user = null
         localStorage.removeItem('me')
+
+        if (userId) {
+            this.users = this.users.remove(userId)
+        }
         this.update()
     }
 
